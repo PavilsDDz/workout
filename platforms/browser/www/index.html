@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Blank App</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href=" css/jquery.mobile-1.4.5.css">
+        <script type="text/javascript" src="cordova.js"></script>
+        <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" /> -->
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<script type="text/javascript">
+			var txt_len = function(){}
+			var validateEmail = function(){}
+			var check_data = function(){}
+			var match_pw = function(){}
+			var get_type = function(){}
+		</script>
+		<script type="text/javascript" src="js/index.js"></script>
+    </head>
+    <body>
+
+
+        <!-- <h1>Hello World</h1> -->
+        <!-- <a href="page.html">go to page 2</a> -->
+        <!-- <p>AAAAA</p> -->
+        <div id="login" data-role="page">
+	    	<div data-role="content" data-theme='a'>
+	    		<div class="input_wrap">
+	    			<input type="text" data-clear-btn="true" name="user" id="user_input"> <label for="user_input">Username or email</label>
+	    		</div>
+	    		<div class="input_wrap">
+	    			<input type="password" data-clear-btn="true" name="password" id="pw_input"> <label for="user_input">password</label>
+	    		</div>
+	    		<a href="#ideas" >ideas</a>
+	    		<a href="#signup">signup</a>
+	    	</div>
+	    </div>
+
+
+
+
+
+
+	<div id="signup" data-role="page" data-theme=''>
+	    	<div data-role="content" data-theme='a'>
+	    		<div class="input_wrap">
+	    			<div class="flex">
+	    				<label for="r_firstname">first name</label>
+	    				<p class="error" id="e_fn"></p>
+	    			</div>
+	    			<input type="text" name="name_input" id="r_firstname" onkeyup="txt_len($(this),3)">
+	    		</div>
+	    		<div class="input_wrap">
+	    			<div class="flex">
+	    				<label for="r_secondname">second name</label>
+	    				<p class="error" id="e_sn"></p>
+	    			</div>
+	    			<input type="text" name="secondname_input" id="r_secondname" onkeyup="txt_len($(this),3)">
+	    		</div>
+	    		<div class="input_wrap">
+	    			<div class="flex">
+	    				<label for="r_username">username</label>
+	    				<p class="error" id="e_un"></p>
+	    			</div>
+	    			<input type="text" name="user_input" id="r_username" onkeyup="txt_len($(this),3)" onblur="check_data('username',$(this))">
+
+	    		</div>
+	    		<div class="input_wrap">
+	    			<div class="flex">
+	    				<label for="r_email">email</label>
+	    				<p class="error" id="e_em"></p>
+	    			</div>
+	    			<input type="text" name="email_input" id="r_email" onkeyup="validateEmail($(this))">
+	    		</div>
+	    		<div class="input_wrap">
+	    			<div class="flex">
+	    				<label for="r_password">password </label>
+	    				<p class="error" id="e_pw"></p>
+	    			</div>
+	    			<input type="password" name="password_input" id="r_password" onkeyup="txt_len($(this),7)">
+	    		</div>
+	    		<div class="input_wrap">
+					<div class="flex">
+	    				<label for="r_password2">password repeat</label>
+	    				<p class="error" id="e_pr"></p>
+					</div>
+	    			<input type="password" name="passwordr_input" id="r_password2" onkeyup="match_pw($('#r_password'),$(this))">
+	    		</div>
+	    		<div class="button_wrap">
+	    			<button onclick="reg()">register</button>
+	    		</div>
+	    		<!-- <a href="">home</a> -->
+	    		<a href="#login">login</a>
+	    	</div>
+	    </div>
+
+
+
+
+
+
+        <div data-role="page" id="ideas" data-theme="">
+        	<div data-role="content" data-theme="a" >
+	        	<ul class="main_nav">
+	        		<li><a href="#login"><-home  </a>Looking for ideas?</li>
+	        		<li><div class="button_main" id="full_link" onclick="show_popup()" >full workout ideas</div></li>
+	        		<li><div class="button_main" id="warm_link"><a href="#next">Warm up ideas</a></div></li>
+	        		<li><div class="button_main" id="solo_link"><a href="#solo_e">solo exerises ideas</a></div></li>
+	        		<li><div class="button_main" id="partner_link"><a href="#partner_e">partner exerises ideas</a></div></li>
+	        		<li><div class="button_main" id="group_link">group exerises ideas</div></li>
+	        		<li><div class="button_main" id="activity_link">activity games ideas</div></li>
+	        	</ul>
+
+	        </div>
+	    </div>
+
+
+
+	    <div data-role="page" persons = '2' id="partner_e">
+	    	<div data-role="content">
+		    	<div class="header">
+		    		<div class="header_nav">
+		    			<div class="level flex">
+		    				<div class="lvl flex everybody active"><h2>everybody</h2></div>
+		    				<div class="lvl flex advanced"><h2>advanced</h2></div>
+		    			</div>
+		    			<div class="zone flex">
+		    				<div type="1" class="zn lower active" onclick="get_type($(this))"><span>lower</span></div>
+		    				<div type="2" class="zn upper" onclick="get_type($(this))"><span>upper</span></div>
+		    				<div type="3" class="zn core" onclick="get_type($(this))"><span>core</span></div>
+		    				<div type="4" class="zn all" onclick="get_type($(this))"><span>all</span></div>
+		    				<div type="5" class="zn hybrid" onclick="get_type($(this))"><span>hybrid</span></div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	<div class="posts">
+		    		
+		    	</div>
+	    	</div>
+	    </div>
+
+
+
+	    <div data-role="page" persons='1' id="solo_e">
+	    	<div data-role="content">
+		    	<div class="header">
+		    		<div class="header_nav">
+		    			<div class="level flex">
+		    				<div level='1' class="lvl flex everybody active" onclick="get_type($(this))"><h2>everybody</h2></div>
+		    				<div level='2' class="lvl flex advanced" onclick="get_type($(this))"><h2>advanced</h2></div>
+		    			</div>
+		    			<div class="zone flex">
+		    				<div type="1" class="zn lower active" onclick="get_type($(this))"><span>lower</span></div>
+		    				<div type="2" class="zn upper" onclick="get_type($(this))"><span>upper</span></div>
+		    				<div type="3" class="zn core" onclick="get_type($(this))"><span>core</span></div>
+		    				<div type=4 class="zn all" onclick="get_type($(this))"><span>all</span></div>
+		    		
+		    			</div>
+		    		</div>
+		    	</div>
+		    	<div class="posts">
+		    		
+		    	</div>
+	    	</div>
+	    </div>
+
+
+
+	    <div data-role='page' id="single">
+	    	<div data-role="content">
+	    		<div class="">
+	    			<div class="post flex">
+	    				<div class="icon" style="background-image:url('+server+item.icon+')"></div>
+	    				<div class="info flex">
+	    					<div class="favorite" fav_id=""></div>
+	    					<h2></h2>
+	    				</div>
+	    			</div>
+	    		</div>
+	    		<div class="video_wrap">
+	    			<video src=""></video>
+	    		</div>
+	    	</div>
+	    </div>
+
+
+
+
+	    <div data-role="page" id="page3">
+	    	
+	    </div>
+
+	    <div data-role='page' id="next" data-theme="">
+	    	<h2>next</h2>
+	    	<a href="#ideas">home</a>
+	    </div>
+	    
+
+	    
+
+    </body>
+    <script type="text/javascript">
+    	full_link = document.getElementById('full_link').click = function(){
+    		window.location = 'full.html'
+    	}
+    </script>
+</html>
