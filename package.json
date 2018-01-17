@@ -4,10 +4,25 @@
   "displayName": "hello",
   "cordova": {
     "platforms": [
-      "android"
-    ]
+      "android",
+      "ios",
+      "browser"
+    ],
+    "plugins": {
+      "cordova-plugin-media": {},
+      "cordova-plugin-device": {},
+      "com.hutchind.cordova.plugins.streamingmedia": {},
+      "com.moust.cordova.videoplayer": {}
+    }
   },
   "dependencies": {
-    "cordova-android": "~6.3.0"
+    "cordova-android": "~6.3.0",
+    "cordova-browser": "^5.0.2",
+    "cordova-ios": "^4.5.4",
+    "cordova-plugin-device": "^1.1.7",
+    "cordova-plugin-file": "^5.0.0",
+    "cordova-plugin-media": "^4.0.0",
+    "cordova-plugin-streaming-media": "^1.0.2",
+    "cordova-plugin-video-player": "^1.0.1"
   }
 }

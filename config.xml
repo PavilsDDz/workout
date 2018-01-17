@@ -10,5 +10,11 @@
     </author>
     <content src="index.html" />
     <access origin="http://workout.tk/" />
+    <plugin name="cordova-plugin-media" spec="^4.0.0" />
+    <plugin name="cordova-plugin-device" spec="^1.1.7" />
+    <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="~0.1.4" />
+    <plugin name="com.moust.cordova.videoplayer" spec="~1.0.1" />
     <engine name="android" spec="~6.3.0" />
+    <engine name="ios" spec="^4.5.4" />
+    <engine name="browser" spec="^5.0.2" />
 </widget>

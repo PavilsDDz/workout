@@ -39,6 +39,9 @@ ul, li {
 	margin: 0;
 	list-style: none;
 }
+
+
+
 button {
 	border: none;
 	background: unset;
@@ -54,14 +57,15 @@ video {
 .ui-page .ui-body-a {
 	background-color: rgba(20,20,20,0);
 	position: relative;
-	height: 100vh;
+
 	box-sizing: border-box;
 	padding: 0;
 	text-shadow: none;
 	color: #eee;
+	position: relative;
 
 }
-a, .main_nav li a, html body .ui-body-a a, html body .ui-body-a a:visited {
+a, html .head a.ui-link, .main_nav li a, html body .ui-body-a a, html body .ui-body-a a:visited {
 	color: #eee;
 	text-decoration: none;
 	font-weight: 400;
@@ -69,15 +73,10 @@ a, .main_nav li a, html body .ui-body-a a, html body .ui-body-a a:visited {
 }
 
 .ui-content {
-	height: 100%;
+	max-height: 90vh;
+}
 
-}
-.main_nav {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	position: relative;
-}
+
 .button_main {
 
 }
@@ -87,14 +86,61 @@ body .ui-overlay-a, body .ui-page-theme-a, body .ui-page-theme-a .ui-panel-wrapp
 	color: #fff;
 }
 
+/* HEAD HEAD HEAD HEAD HEAD HEAD HEAD HEAD HEAD HEAD HEAD HEAD HEAD */
+
+
+.head {
+	height: 7vh;
+	background-color: rgba(50,50,50,0.7);
+	box-sizing: border-box;
+	padding: 0 15px;
+	align-items: center;
+	-webkit-align-items: center;
+}
+.home_link div {
+	width: 6vh;
+	height: 6vh;
+	background-image: url(img/home.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.back_btn {
+	margin-right: auto;
+}
+.home_link {
+	margin-left: auto;
+}
+.login_link{
+	margin-left: 15px;
+}
+
+.profile_link {
+	width: 15px;
+	height: 15px;
+	background-color: red;
+	display: none;
+}
+.user_stuff {
+	z-index: 1000;
+	position: fixed;
+	left: 100%;
+}
 
 /* MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN */
 
+.main_nav {
+	display: flex;
+	flex-direction: column;
+	height: 90vh;
+	position: relative;
+}
 .main_nav li {
 	height: calc(100% / 7);
 	line-height: calc(100vh / 7);
 	text-align: center;
 	text-transform: uppercase;
+	overflow: hidden;
 
 }
 .main_nav li:nth-child(even){
@@ -115,9 +161,8 @@ body .ui-overlay-a, body .ui-page-theme-a, body .ui-page-theme-a .ui-panel-wrapp
 }
  .zone{
  	
- 	height: 15vw;
- 	max-height: 110px;
- 	min-height: 65px;
+ 	height: 10vh;
+
 
  }
  .zone .zn {
@@ -167,7 +212,7 @@ body .ui-overlay-a, body .ui-page-theme-a, body .ui-page-theme-a .ui-panel-wrapp
  }
  .level .lvl{
  	width: 50%;
- 	height: 10vh;
+ 	height: 7vh;
  	max-height: 50px;
  	text-align: center;
  	align-items: center;
@@ -184,20 +229,30 @@ body .ui-overlay-a, body .ui-page-theme-a, body .ui-page-theme-a .ui-panel-wrapp
   	font-size: 15px;
   	font-weight: 400;
   }
+  .posts {
+  	height: 76vh;
+  	overflow: scroll;
+  }
   .post{
   	position: relative;
  	border-top: solid 1px rgba(100,100,100,0.7);
 
   }
   .post .icon {
-  	width: 20vw;
-  	height: 20vw;
+  	width: 35vw;
+  	height: 20vw; /* js var post_height refers to this*/
   	background-size: contain;
   }
   .post .info {
-  	height: 20vw;
+  	height: 20vw; /* js var post_height refers to this*/
   	align-items: center;
   	-webkit-align-items: center;
+  }
+  .post:last-child{
+  	margin-bottom: calc(76vh - 20vw)
+  }
+  #posts .post:first-child{
+  	/*margin-top: 38vh*/
   }
   .post h2 {
   	font-size: 0.8em;
