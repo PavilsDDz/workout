@@ -1,29 +1,14 @@
-var server = 'http://192.168.0.195/workout.tk/'//'http://workout.tk/'
+var server = 'http://workout.tk/'
 var user;
 var storage;
-var fav_array;
+var fav_array =[];
+var posts;
 
-
-// function show_popup(){
-// 	alert('goooooo')
-// }
-// function ajax1(){
-// 	$.support.cors=true;
-
-// 		 $.ajax({url: server+"index.php", success: function(result){
-//         $("#page3").html(result)
-//         console.log(result + '1')
-//     },error:function(xhr,status,error){
-//     	console.log('Error')
-//     }
-// }); 
-	
-// }
 
 /*
 /////////////////////////////////////
                         registration
-////////////////////////////////////
+///////////////////////////////////
 */
 var r_approve = [false,false,false,false,false,false];
 var r_approved = false;
@@ -49,8 +34,8 @@ function reg(){
                 alert('error on registration')
             }
         })
-        .fail(function() {
-            alert( "error" );
+        .fail(function(xhr, status, error) {
+            alert( error );
         })
     }
 }
@@ -150,7 +135,7 @@ var txt_len = function(input, len){
 
 
 function get_type(that){
-    $('.posts').empty()
+   // $('.posts').empty()
     id = $.mobile.activePage.attr('id')
 
     if (that.hasClass('lvl')) {
@@ -169,15 +154,54 @@ function get_type(that){
     t=""+persons+""+level+""+type
 
   query_videos(t,'list')
-    
-   
 
 }
 
 
 
+                            function fav_check(item){
+                              console.log('checking favorites')
+                              for (var i = 0; i < fav_array.length; i++) {
+                                if(fav_array[i]['post_id']==item.id){
+                                  console.log(item.id + ' favorited')
+                                  return 'fav_rem'
+                                }
+                              }
+                              return 'fav_add';
+                            }
+   var pos_array = []
+       array_check = 0
+  calc_pos =function(){
+      // pos_array = [0]
+      id = $.mobile.activePage.attr('id')
+      o1 = $('#'+id+' .posts').offset()
+      st = $('#'+id+' .posts').scrollTop()
+      $('.test').remove()
+      $('.post').each(function(index){
+       pos_array[index] = $(this).offset().top+scrt-o1.top
+       // $('body').append('<div class="test" style="top:'+(pos_array[index]-scrt+o1.top)+'px;">'+index+'</div>')
+      })
+       console.log(pos_array)
+
+
+       for (var i = 0; i < pos_array.length-1; i++) {
+        if (pos_array[i]==pos_array[i+1]&&array_check<3) {
+          array_check++;
+          setTimeout(function(){calc_pos()},250*array_check+1)
+          
+          break;
+        }
+       }
+
+      // for (var i = 0; i < $('.post').length-1; i++) {
+      //    o = $('.post:eq('+i+')').offset()
+      //    pos_array.push(o.top-o1.top+st)
+      //    console.log(pos_array,$('#'+id+' .posts'))
+      // }
+    }
 
 function query_videos (filter,i){
+  
   // alert(filter)
    
      $.ajax({url: server+"index.php?query_videos="+i+"&filter="+filter, success: function(result){
@@ -186,18 +210,24 @@ function query_videos (filter,i){
             var content_array
 
             if (result!=null&&result!='') {
+              console.log(result)
               content_array = JSON.parse(result);
             console.log(content_array)
+            $('.posts').empty()
 
-              if (i=='list') {
+              if (i=='list' || i=='favorites') {
                             id = $.mobile.activePage.attr('id')
+                            console.log(id + 'active page id ;p')
+                  let a = 0
                   content_array.forEach(function(item){
-
+                    
                             $("#"+id+" .posts").append(
-                              '<div class="post flex"><div><a class="single_link" link="'+item.link+'"><div class="icon" style="background-image:url('+server+"icons/"+item.link+'.jpg)" link="'+item.link+'"></div></a></div><div class="info flex"><div class="favorite" fav_id="'+item.id+'"></div><a class="single_link" post="'+item.id+'" link="'+item.link+'"><h2>'+item.title+'</h2></a></div></div>'
+                              '<div class="post flex" style="'+function(){ a<2 ? b = "background-color:rgba(0,0,0,0.6)" : b = "";return b;  }()+'"><div><a class="single_link" link="'+item.link+'" ><div class="icon" style="background-image:url('+server+function(){ a<2 ? b = ["gifs","gif"] : b = ["icons","jpg"]; return b[0]+'/'+item.link+'.'+b[1]+''; }()+')" link="'+item.link+'"></div></a></div><div class="info flex"><div class="favorite '+fav_check(item)+'" fav_id="'+item.id+'"></div><a class="single_link" post="'+item.id+'" link="'+item.link+'"><h2>'+item.title+'</h2></a></div></div>'
                               )
+                            a++;
                    });
-                  calc_pos()
+                 calc_pos()
+                  
                
               }else if (i=='single') {
                   //console.log(content_array)
@@ -227,13 +257,18 @@ function query_videos (filter,i){
 
 
 function edit_favorites(a,pid){
-  console.log('asdsfghj')
+  //console.log('asdsfghj')
   $.post( server+"index.php?favorites=true", {user_id:user.id , post_id:pid, action:a})
   .done(function(data){
     if(data){
       console.log(data)
       switch(a){
         case 'add':
+
+            edit_favorites('select',0)
+            if (parseInt(data) === 1 || data === '1') {
+              $(".favorite[fav_id='"+pid+"'").addClass('fav_rem').removeClass('fav_add')
+            }
           break;
         case 'select':
           if(data != 0  && data != '0' && data != null){
@@ -242,9 +277,22 @@ function edit_favorites(a,pid){
             fav_array = JSON.parse(storage.getItem('favorites'))
             console.log(fav_array)
           }else{
+            fav_array=[];
             console.log('no favorites found')
           }
+          break;
+        case 'remove':
+            console.log('remove from favorites')
+            edit_favorites('select',0)
+            if (parseInt(data) === 1 || data === '1') {
 
+              $(".favorite[fav_id='"+pid+"'").addClass('fav_add').removeClass('fav_rem')
+             
+            }else{
+        // $(this).addClass('fav_rem').removeClass('fav_add')
+             
+            }
+          break;
       }
 
     }else{
@@ -258,17 +306,6 @@ function edit_favorites(a,pid){
   })
 }
 
-
-
-// document.getElementById('login_btn').onclick = function(){login()}
-
-// function login(){
-//   username = document.getElementById('user_input').value()
-//   password = document.getElementById('pw_input').value()
-
-//   console.log(username,password)
-
-// }
 
  function login(u,p){
      $.post( server+"index.php?login=true", {username:u , password:p})
@@ -290,146 +327,15 @@ function edit_favorites(a,pid){
                 alert('wrong username or password')
             }
         })
-        .fail(function() {
-            alert( "error" );
+        .fail(function(xhr, status, error) {
+            alert( error, status, xhr );
         })
  }
-var pos_array = []
-function calc_pos(){
-  pos_array = []
-  id = $.mobile.activePage.attr('id')
-  o1 = $('#'+id+' .posts').offset()
-  for (var i = 0; i < $('.post').length-1; i++) {
-     o = $('.post:eq('+i+')').offset()
-     pos_array.push(o.top-o1.top)
-     console.log(pos_array)
-  }
-}
+
+
+
 
 $(function(){
-
-   $('.post_set').click(function(){
-    
-    posts = document.getElementById($(this).attr('posts_field'))
-    console.log(posts)
-  })
-
-  function addvideo(t,l){
-    // alert(t)
-       t.parent().parent().after('<div class="video_wrap" style="display:none"><video webkit-playsinline loop id="video" poster="img/video_load.jpg" ><source src="'+server+'videos/'+l+'.mp4" type="video/mp4"></video></div>')
-    $('.video_wrap').slideDown(400, function(){calc_pos()})
-      var vid = document.getElementById("video"); 
-      console.log(t.parent().parent())
-      vid.play()
-    }
-
-
- $('.posts').delegate('a','click',function(){
-    let link = $(this).attr('link')
-
-    
-
-      console.log($('.video_wrap').length)
-   if (!$('.video_wrap').length) {
-      addvideo($(this),link)
-   }else{
-      single = $(this)
-      $('.video_wrap').slideUp(400,function(){
-        $('.video_wrap').remove()
-         addvideo(single,link)
-        
-      })
-    
-   }
-
-    //query_videos(getid,'single')
-    //$.mobile.changePage("#single");
-
- })
-
-
- $('#login_btn').click(function(){
-  username = document.getElementById('user_input').value
-  password = document.getElementById('pw_input').value
-  login(username,password)
-  console.log(username,password)
-
- })
-
-    post_height = (window.innerWidth /100) * 20 // post height = 20vw
-    post_online_old = 0
-    queue = [0,1]
-    dir = 0
-
-    stop_old = 0
-    post_online = 0
-    var posts //=  document.getElementById('posts')
-
-    function calc_post_line(){
-      if (dir) {
-            console.log(post_online)
-        for (var i = 0; i < pos_array.length; i++) {
-          if (posts.scrollTop>pos_array[post_online+1]) {
-            console.log(i, dir, '+',posts.scrollTop,">",pos_array[post_online+1])
-            return post_online+1;
-          }
-        }
-      }else if(!dir){
-        for (var i = 0; i < pos_array.length; i++) {
-          if (posts.scrollTop<pos_array[post_online]) {
-            console.log(i, dir, '-',posts.scrollTop,"<",pos_array[post_online-1])
-            return post_online-1;
-          }
-        }
-      }
-      return post_online;
-    }
-
-
-
-
-  $('.posts').scroll(function(){
-
-    dir = stop_old>posts.scrollTop ? 0 : 1
-    
-    post_online = calc_post_line()//Math.floor((posts.scrollTop+$('.video_wrap').height())/post_height) + add
-
-    if (post_online!=post_online_old) {
-     
-      //now = $('#posts .post:eq('+post_online+') .icon').attr('link')
-      //$('#posts .post:eq('+post_online+') .icon').css('background-image','url('+server+'/gifs/'+now+'.gif)')
-      //now1 = $('#posts .post:eq('+(post_online+1)+') .icon').attr('link')
-      //queue.push(post_online)
-
-      queue.unshift(post_online)
-
-      for (var i = 0; i < 2; i++) {
-        ind = queue[i]
-        link = $('#'+posts.id+' .post:eq('+ind+') .icon').attr('link')
-        $('#'+posts.id+' .post:eq('+ind+') .icon').css('background-image','url('+server+'/gifs/'+link+'.gif)')
-        $('#'+posts.id+' .post:eq('+ind+')').css('background-color','rgba(0,0,0,0.6)')
-      }
-      icon = $('#'+posts.id+' .post:eq('+queue[2]+') .icon').attr('link')
-      $('#'+posts.id+' .post:eq('+queue[2]+') .icon').css('background-image','url('+server+'/icons/'+icon+'.jpg)')
-        $('#'+posts.id+' .post:eq('+queue[2]+')').css('background-color','rgba(0,0,0,0)')
-    
-      //console.log(queue)
-      queue.splice(-1,1)
-      post_online_old = post_online
-    
-    } 
-
-      stop_old = posts.scrollTop
-
-  })
-
-
-
-
- $('.posts').delegate('.favorite','click',function(){
-    edit_favorites('add',$(this).attr('fav_id'))
-  })
-
 
 })
 
@@ -445,47 +351,319 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
 
+// var xhr = new XMLHttpRequest();
+// xhr.open('POST', 'http://192.168.0.194/workout.tk?test=1', true);
+// xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+// xhr.onreadystatechange = function() {
+//     console.log(xhr.readyState)
+//   if (xhr.readyState === 4) {
+//     // var response = JSON.parse(xhr.responseText);
+//       if (xhr.status === 200 && response.status === 'OK') {
+//          console.log('successful');
+//       } else {
+//          console.log('failed');
+//       }
+//   }
+// }
+// xhr.onload = function () {
+//     // do something to response
+//     alert(this.responseText);
+// };
+// xhr.send('user=person&pwd=password&organization=place&requiredkey=key');
 
 
-// STORAGE AND USER DEFINE 
+
+//Sets up device storage and user
+
 
   storage = window.localStorage;
-  //storage.setItem('user', '')
-  //storage.setItem('name', 'my name') // Pass a key name and its value to add or update that key.
-  //storage.removeItem(key) // Pass a key name to remove that key from storage.
- // var value = storage.getItem('name'); // Pass a key name to get its value.
- // console.log(value)
+  var user_loc
+  if (storage.getItem('user')!= null && storage.getItem('user') != 'undefined' && storage.getItem('user') != '') {
 
   user_loc = JSON.parse(storage.getItem('user'))
-
   console.log(user_loc)
 
-  if(user_loc != 'undefined' && user_loc != null){
+    if(user_loc != 'undefined' && user_loc != null){
 
-    $.mobile.changePage("#ideas");
-    user = user_loc[0]
+      $.mobile.changePage("#ideas");
+      user = user_loc[0]
+      $(".login_link").css('display','none')
+      $(".profile_link").css('display','block')
 
-    $(".login_link").css('display','none')
-    $(".profile_link").css('display','block')
+      edit_favorites('select',0)
 
-    edit_favorites('select',0)
-
+    }
 
   }
 
 
-// POST SCROLLER
  
-// PROFILE CALL
- $(".profile_link").click(function(){
-  $('.user_stuff').animate({'left':'0'},300)
- })
-//PAGE SETUP
+// Profile controlls
+
+  //shows profile controls
+  var usv = 1;
+  $(".profile_link").click(function(){
+
+    $('.user_stuff').animate({'left':$(window).width()-$('.user_stuff').width()*usv},300,function(){
+      if (usv) {usv = 0}else{
+        usv = 1
+      }
+    })
+  })
+
+  //login
+  $('#login_btn').click(function(){
+    username = document.getElementById('user_input').value
+    password = document.getElementById('pw_input').value
+    login(username,password)
+    console.log(username,password)
+  })
+
+  //logout
   $('.logout').click(function(){
     storage.setItem('user','')
+    storage.setItem('favorites','')
     user = null
+    fav_array = []
     $.mobile.changePage('#login')
     $('.user_stuff').css('left','100%')
   })
+
+  //favorites setup
+
+  $('#fav_link').click(function(){
+    query_videos(user.id,'favorites')
+
+  })
+
+
+//Post controls, load and dispaly
+
+  //determines between single workout, partner workout and such
+    // $('.post_set').click(function(){
+    //   posts = document.getElementById($(this).attr('posts_field'))
+    //   console.log(posts)
+    // })
+
+  //post scroll
+
+    post_height = (window.innerWidth /100) * 20 // post height = 20vw
+    post_online_old = 0
+    queue = [0,1]
+    dir = 0
+
+    stop_old = 0
+    post_online = 0
+
+    positons = []
+    cont = $('#container')
+    //posts = $('.post')
+    co = cont.offset()
+    online = 0
+    playing = [0,1]
+    offline = null
+    scrt = 0 
+
+ 
+
+    //caulculates each post offset in div
+    function calc_post_line(){
+      if (dir) {
+            console.log(post_online)
+        for (var i = 0; i < pos_array.length; i++) {
+          if (posts.scrollTop>pos_array[post_online+1]) {
+            console.log(i, dir, '+',posts.scrollTop,">",pos_array[post_online+1])
+            return post_online+1;
+          }
+        }
+      }else if(!dir){
+            console.log(post_online)
+
+        for (var i = 0; i < pos_array.length; i++) {
+          if (posts.scrollTop<pos_array[post_online]) {
+            console.log(i, dir, '-',posts.scrollTop,"<",pos_array[post_online-1])
+            return post_online-1;
+          }
+        }
+      }
+      return post_online;
+    }
+
+
+
+    calc_online = function(s,d){
+
+
+      console.log(s,pos_array)
+      for (var i = 0; i < pos_array.length; i++) {
+          //console.log(s+'>'+pos_array[i]+'&&'+s+'<'+pos_array[i+1])
+        if (s>pos_array[i]&&s<pos_array[i+1]) {
+          console.log('calc  2',online,offline,$('.post').length)
+          online = i
+          if (online!=offline&&online<$('.post').length-1) {
+         console.log(online,scrt)
+         console.log(pos_array)
+         // console.log(online, offline,)
+            // $('.this').html(positons[i])
+            // $('.next').html(positons[i+1])
+            // $('.online').html(i)
+
+            playing.unshift(i,i+1)
+
+            let link = $('#'+posts.id+' .post:eq('+playing[3-dir]+') .icon').attr('link')
+            $('#'+posts.id+' .post:eq('+playing[3-dir]+') .icon').css('background-image','url('+server+'/icons/'+link+'.jpg)')
+            $('#'+posts.id+' .post:eq('+playing[3-dir]+')').css('background','rgba(0,0,0,0)')
+
+             link = $('#'+posts.id+' .post:eq('+playing[0]+') .icon').attr('link')
+            $('#'+posts.id+' .post:eq('+playing[0]+') .icon').css('background-image','url('+server+'/gifs/'+link+'.gif)')
+            $('#'+posts.id+' .post:eq('+playing[0]+')').css('background-color','rgba(0,0,0,0.6)')
+
+             link = $('#'+posts.id+' .post:eq('+playing[1]+') .icon').attr('link')
+            $('#'+posts.id+' .post:eq('+playing[1]+') .icon').css('background-image','url('+server+'/gifs/'+link+'.gif)')
+            $('#'+posts.id+' .post:eq('+playing[1]+')').css('background-color','rgba(0,0,0,0.6)')
+            //$('.post:eq('+playing[]+')').css('background-color','rgba(100,10,200,0.3)')
+            //console.log(playing)
+
+            playing.splice(-2,2)
+            //playing.splice(-1,1)
+            //playing.pop()
+            $('.playing').html(playing[0]+','+playing[1])
+            //console.log(playing)
+            offline = online
+            break;
+
+          }
+        }
+      }
+    }
+
+
+
+
+
+    //post scroll interactivity
+    $('.posts').scroll(function(){
+
+
+      scrt = posts.scrollTop
+      // for (var i = 0; i < pos_array.length; i++) {
+      //   $('.test:eq('+i+')').css('top',pos_array[i]-scrt+o1.top)
+      // }
+      dir = stop_old>posts.scrollTop ? 0 : 1
+      calc_online(scrt,dir)
+      stop_old = posts.scrollTop
+
+      // post_online = calc_post_line()
+
+      // if (post_online!=post_online_old) {
+       
+      //   queue.unshift(post_online+dir)
+      //   console.log(queue)
+      //   icon = $('#'+posts.id+' .post:eq('+queue[2]+') .icon').attr('link')
+      //   $('#'+posts.id+' .post:eq('+queue[2]+') .icon').css('background-image','url('+server+'/icons/'+icon+'.jpg)')
+      //   $('#'+posts.id+' .post:eq('+queue[2]+')').css('background-color','rgba(0,0,0,0)')
+
+      //   for (var i = 0; i < 2; i++) {
+      //     ind = queue[i]
+      //     console.log($('#'+posts.id+' .post:eq('+ind+')'))
+      //     link = $('#'+posts.id+' .post:eq('+ind+') .icon').attr('link')
+      //     $('#'+posts.id+' .post:eq('+ind+') .icon').css('background-image','url('+server+'/gifs/'+link+'.gif)')
+      //     $('#'+posts.id+' .post:eq('+ind+')').css('background-color','rgba(0,0,0,0.6)')
+      //   }
+
+      //   queue.splice(-1,1)
+      //   post_online_old = post_online
+    
+      // } 
+      // stop_old = posts.scrollTop
+    })
+
+
+
+    //add post to favorites
+    $('.posts').delegate('.fav_add','click',function(){
+      edit_favorites('add',$(this).attr('fav_id'))
+        
+      
+    })
+    $('.posts').delegate('.fav_rem','click',function(){
+      edit_favorites('remove',$(this).attr('fav_id'))
+      
+    })
+
+    //function to displays video
+    function addvideo(t,l){
+      
+      t.parent().parent().after('<div class="video_wrap" style="display:none"><video webkit-playsinline playsinline loop id="video" poster="img/video_load.jpg" ><source src="'+server+'videos/'+l+'.mp4" type="video/mp4"></video></div>')
+      $('.video_wrap').slideDown(400, function(){calc_pos()})
+      var vid = document.getElementById("video"); 
+      console.log(t.parent().parent())
+      vid.play()
+    }
+
+    //display video
+    $('.posts').delegate('a','click',function(){
+
+      let link = $(this).attr('link')
+      console.log($('.video_wrap').length)
+
+      if (!$('.video_wrap').length) {
+        addvideo($(this),link)
+      }else{
+        single = $(this)
+        $('.video_wrap').slideUp(400,function(){
+          $('.video_wrap').remove()
+          addvideo(single,link)
+        
+        })
+    
+      }
+    //query_videos(getid,'single')
+    //$.mobile.changePage("#single");
+
+
+    })
+
+  var user_stuff_vis = 0
+  $(window).resize(function(){
+    if (!user_stuff_vis) {
+      user_stuff_vis = 1
+      $('.user_stuff').stop().css({'left':$(window).width()-$('.user_stuff').width()})
+    }else{
+      user_stuff_vis = 0
+      $('.user_stuff').stop().css({'left':'100%'})
+    }
+    calc_pos()
+  })
+
+  $( 'body' ).on( 'pagechange', function( event ) { 
+    $( ".user_stuff" ).stop().animate({'left':'100%'})
+    post_online = 0
+    page_now = $.mobile.activePage
+
+      
+        console.log(page_now)
+        posts = document.querySelector("#"+page_now[0].id+' .posts') //ocument.getElementByQuerySelector($(this).attr('posts_field'))
+      
+        
+   } )
+
+  $('body').on('swipeleft',function(){
+   
+    if (!user_stuff_vis) {
+      user_stuff_vis=1
+      $('.user_stuff').stop().animate({'left':$(window).width()-$('.user_stuff').width()})
+    }
+  })
+
+  $('body').on('swiperight',function(){
+  
+
+    if (user_stuff_vis) {
+      user_stuff_vis=0
+      $('.user_stuff').stop().animate({'left':'100%'})
+    }
+  })
+
 
 }

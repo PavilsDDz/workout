@@ -14,8 +14,9 @@
         <script type="text/javascript" src="cordova.js"></script>
         
         <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" /> -->
-		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <access origin="http://code.jquery.com" subdomains="true" />
+		<script src="js/jquery-1.11.1.js"></script>
+		<script src="js/jquery.mobile-1.4.5.js"></script>
 		<script type="text/javascript">
 			var txt_len = function(){}
 			var validateEmail = function(){}
@@ -31,12 +32,17 @@
         <!-- <h1>Hello World</h1> -->
         <!-- <a href="page.html">go to page 2</a> -->
         <!-- <p>AAAAA</p> -->
+        <div class="user_stuff">
+        	<div class="logout">logout</div>
+        	<div class="favorite_page_link"><a href="#favorites" class="post_set" id="fav_link" posts_field='fav_posts'>favorites</a></div>
+        </div>
         <div id="login" data-role="page">
         	<div class="head flex" data-role="">
 
         		<a class="back_btn" data-icon="" data-rel="back" title="Go back">back_btn</a>
         		<a class="home_link" href="#ideas"><div></div></a>
-        		<!-- <a href="#login" class="login_link"><div>login</div></a> -->
+        		<!-- <a href="#login" class="login_link"><div>login</div></a>
+        		<a href="" class="profile_link" ><div></div></a> -->
         	</div>
 	    	<div data-role="content" data-theme='a'>
 	    		<div class="input_wrap">
@@ -62,6 +68,7 @@
         	<a class="back_btn" data-icon="" data-rel="back" title="Go back">back_btn</a>
         	<a class="home_link" href="#ideas"><div></div></a>
         	<a href="#login" class="login_link"><div>login</div></a>
+        	<a href="" class="profile_link" ><div></div></a>
         </div>
 	    	<div data-role="content" data-theme='a'>
 	    		<div class="input_wrap">
@@ -126,14 +133,15 @@
 	        	<a class="back_btn" data-icon="" data-rel="back" title="Go back">back_btn</a>
 	        	<a class="home_link" href="#ideas"><div></div></a>
 	        	<a href="#login" class="login_link"><div>login</div></a>
+	        	<a href="" class="profile_link" ><div></div></a>
 	        </div>
         	<div data-role="content" data-theme="a" >
 	        	<ul class="main_nav">
 	        		<li><a href="#login"><-home  </a>Looking for ideas?</li>
 	        		<li><div class="button_main" id="full_link" onclick="show_popup()" >full workout ideas</div></li>
 	        		<li><div class="button_main" id="warm_link"><a href="#next">Warm up ideas</a></div></li>
-	        		<li><div class="button_main" id="solo_link"><a href="#solo_e">solo exerises ideas</a></div></li>
-	        		<li><div class="button_main" id="partner_link"><a href="#partner_e">partner exerises ideas</a></div></li>
+	        		<li><div class="button_main" id="solo_link"><a class="post_set" posts_field='posts' href="#solo_e">solo exerises ideas</a></div></li>
+	        		<li><div class="button_main" id="partner_link"><a class="post_set" posts_field="posts_p"  href="#partner_e">partner exerises ideas</a></div></li>
 	        		<li><div class="button_main" id="group_link">group exerises ideas</div></li>
 	        		<li><div class="button_main" id="activity_link">activity games ideas</div></li>
 	        	</ul>
@@ -149,6 +157,7 @@
 	        	<a class="back_btn" data-icon="" data-rel="back" title="Go back">back_btn</a>
 	        	<a class="home_link" href="#ideas"><div></div></a>
 	        	<a href="#login" class="login_link"><div>login</div></a>
+	        	<a href="" class="profile_link" ><div></div></a>
 	        </div>
 	    	<div data-role="content">
 		    	<div class="header">
@@ -166,7 +175,7 @@
 		    			</div>
 		    		</div>
 		    	</div>
-		    	<div class="posts">
+		    	<div class="posts" id="posts_p">
 		    		
 		    	</div>
 	    	</div>
@@ -182,6 +191,7 @@
 	        	<a class="back_btn" data-icon="" data-rel="back" title="Go back">back_btn</a>
 	        	<a class="home_link" href="#ideas"><div></div></a>
 	        	<a href="#login" class="login_link"><div>login</div></a>
+	        	<a href="" class="profile_link" ><div></div></a>
 	        </div>
 	    	<div data-role="content">
 		    	<div class="header">
@@ -214,6 +224,7 @@
 	        	<a class="back_btn" data-icon="" data-rel="back" title="Go back">back_btn</a>
 	        	<a class="home_link" href="#ideas"><div></div></a>
 	        	<a href="#login" class="login_link"><div>login</div></a>
+	        	<a href="" class="profile_link" ><div></div></a>
 	        </div>
 	    	<div data-role="content">
 	    		<div class="">
@@ -231,6 +242,21 @@
 		           </video>
 	    		</div> -->
 	    	</div>
+	    </div>
+
+	    <div data-role="page" id="favorites">
+	    	<div class="head flex" data-role="">
+
+	        	<a class="back_btn" data-icon="" data-rel="back" title="Go back">back_btn</a>
+	        	<a class="home_link" href="#ideas"><div></div></a>
+	        	<a href="#login" class="login_link"><div>login</div></a>
+	        	<a href="" class="profile_link" ><div></div></a>
+	        </div>
+	        <div data-role="content">
+	        	<div class="posts" id="fav_posts">
+		    		
+		    	</div>
+	        </div>
 	    </div>
 
 

@@ -12,7 +12,8 @@
       "cordova-plugin-media": {},
       "cordova-plugin-device": {},
       "com.hutchind.cordova.plugins.streamingmedia": {},
-      "com.moust.cordova.videoplayer": {}
+      "com.moust.cordova.videoplayer": {},
+      "cordova-plugin-whitelist": {}
     }
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "cordova-plugin-file": "^5.0.0",
     "cordova-plugin-media": "^4.0.0",
     "cordova-plugin-streaming-media": "^1.0.2",
-    "cordova-plugin-video-player": "^1.0.1"
+    "cordova-plugin-video-player": "^1.0.1",
+    "cordova-plugin-whitelist": "git+https://github.com/apache/cordova-plugin-whitelist.git"
   }
 }

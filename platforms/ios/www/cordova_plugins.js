@@ -221,7 +221,8 @@ module.exports.metadata =
   "cordova-plugin-file": "5.0.0",
   "cordova-plugin-media": "4.0.0",
   "cordova-plugin-device": "1.1.7",
-  "com.moust.cordova.videoplayer": "1.0.1"
+  "com.moust.cordova.videoplayer": "1.0.1",
+  "cordova-plugin-whitelist": "1.3.4-dev"
 };
 // BOTTOM OF METADATA
 });

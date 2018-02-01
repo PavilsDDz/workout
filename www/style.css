@@ -107,6 +107,15 @@ body .ui-overlay-a, body .ui-page-theme-a, body .ui-page-theme-a .ui-panel-wrapp
 }
 .back_btn {
 	margin-right: auto;
+
+}
+.back_btn div{
+	width: 5vh;
+	height: 5vh;
+	background-image: url(img/back.svg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center center;
 }
 .home_link {
 	margin-left: auto;
@@ -116,16 +125,35 @@ body .ui-overlay-a, body .ui-page-theme-a, body .ui-page-theme-a .ui-panel-wrapp
 }
 
 .profile_link {
-	width: 15px;
-	height: 15px;
-	background-color: red;
+	width: 6vh;
+	height: 6vh;
+	background-image: url(img/user.svg);
+	background-size: 70%;
+	background-position: center center;
+	background-repeat: no-repeat;
 	display: none;
+	margin-left: 10px;
 }
 .user_stuff {
 	z-index: 1000;
 	position: fixed;
 	left: 100%;
+	background-color: rgba(0,0,0,0.5);
+	top: 7vh;
+	height: 93vh;
+	color: #eee;
+	
 }
+.user_stuff ul, .user_stuff li {
+	margin: 0;
+}
+.user_stuff li {
+	margin-top: 10px;
+}
+.user_stuff ul {
+	padding: 0 20px;
+}
+
 
 /* MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN */
 
@@ -265,12 +293,17 @@ body .ui-overlay-a, body .ui-page-theme-a, body .ui-page-theme-a .ui-panel-wrapp
   .post .favorite {
   	width: calc(20px + 0.5vw);
   	height: calc(20px + 0.5vw);
-  	background-image: url(img/favorite.png);
+  	/*background-image: url(img/favorite.png);*/
   	background-size: contain;
   	background-repeat: no-repeat;
   	background-position: center;
   }
-
+.post .fav_add {
+	background-image: url(img/favorite.png);
+}
+.post .fav_rem {
+	background-image: url(img/favorite_a.png);
+}
 
 /*REGISTRATION REGISTRATION REGISTRATION REGISTRATION */
 .input_wrap .flex {

@@ -41,7 +41,8 @@
         PhoneGap Team
     </author>
     <content src="index.html" />
-    <access origin="http://workout.tk/" />
+    <access origin="*" />
+    <allow-intent href="*://*192.168.0.194/workout.tk/*" />
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
